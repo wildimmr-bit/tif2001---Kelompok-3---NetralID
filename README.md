@@ -5,7 +5,7 @@ nama kelompok dan tugas
 2. Wildanul Ikhsan (Backend & Database Engineer)
 3. Mohammad Mahfudin (QA, DevOps & Integration Specialist)
 
-Aplikasi Manajemen tugas
+Aplikasi Sistem Rekomendasi Film
 
 1. Latar Belakang Masalah
 2. Solusi Aplikasi
