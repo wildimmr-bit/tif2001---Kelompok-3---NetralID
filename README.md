@@ -5,7 +5,7 @@ nama kelompok dan tugas
 2. Wildanul Ikhsan (Backend & Database Engineer)
 3. Mohammad Mahfudin (QA, DevOps & Integration Specialist)
 
-Aplikasi pesanan dan produksi mebel
+Aplikasi ERP (pesanan dan produksi mebel)
 
 analisis kebutuhan:
 aplikasi pesanan dan produksi mebel
