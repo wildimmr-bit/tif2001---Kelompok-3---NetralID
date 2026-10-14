@@ -1,4 +1,3 @@
-cat > docs/review_checklist.md << 'EOF'
 # Checklist Review Pull Request
 
 - [ ] Kode mengikuti struktur folder yang disepakati
@@ -7,4 +6,3 @@ cat > docs/review_checklist.md << 'EOF'
 - [ ] Validasi input sudah ada
 - [ ] Tidak ada password, token, atau secret di dalam kode
 - [ ] Fitur sudah diuji manual dan ada bukti di PR
-EOF
