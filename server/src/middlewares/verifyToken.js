@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
   try {
     req.user = jwt.verify(header.split(' ')[1], process.env.JWT_SECRET);
     next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({ message: 'Token tidak valid atau kedaluwarsa' });
   }
 };
