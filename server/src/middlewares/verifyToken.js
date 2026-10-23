@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const { verifyToken: verifyJwt } = require('../utils/auth');
 
 const verifyToken = (req, res, next) => {
   const header = req.headers.authorization;
@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
   }
 
   try {
-    req.user = jwt.verify(header.split(' ')[1], process.env.JWT_SECRET);
+    req.user = verifyJwt(header.split(' ')[1]);
     next();
   } catch {
     return res.status(401).json({ message: 'Token tidak valid atau kedaluwarsa' });

@@ -1,5 +1,4 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { hashPassword, comparePassword, generateToken } = require('../utils/auth');
 const pool = require('../config/db');
 
 const register = async (req, res) => {
@@ -18,7 +17,7 @@ const register = async (req, res) => {
       return res.status(409).json({ message: 'Email sudah terdaftar' });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashed = await hashPassword(password);
     const result = await pool.query(
       'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, role, created_at',
       [name, email, hashed]
@@ -46,16 +45,12 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Email atau password salah' });
     }
 
-    const match = await bcrypt.compare(password, user.password);
+    const match = await comparePassword(password, user.password);
     if (!match) {
       return res.status(401).json({ message: 'Email atau password salah' });
     }
 
-    const token = jwt.sign(
-      { id: user.id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    const token = generateToken(user);
 
     return res.status(200).json({
       message: 'Login berhasil',

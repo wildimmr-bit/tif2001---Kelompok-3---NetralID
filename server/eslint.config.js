@@ -2,7 +2,7 @@ const js = require('@eslint/js');
 const globals = require('globals');
 
 module.exports = [
-  { ignores: ['node_modules/'] },
+  { ignores: ['node_modules/', 'coverage/'] },
   js.configs.recommended,
   {
     files: ['**/*.js'],
@@ -12,6 +12,12 @@ module.exports = [
     },
     rules: {
       'no-unused-vars': 'warn',
+    },
+  },
+  {
+    files: ['tests/**/*.js', '**/*.test.js'],
+    languageOptions: {
+      globals: { ...globals.jest },
     },
   },
 ];
