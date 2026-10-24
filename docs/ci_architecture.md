@@ -13,30 +13,48 @@ Dokumen ini menjelaskan pipeline Continuous Integration (CI) di `.github/workflo
 
 Dua job berjalan paralel di `ubuntu-latest`.
 
-| Job | Folder kerja | Langkah aktif |
+| Job | Folder kerja | Langkah |
 |---|---|---|
-| `frontend` (Frontend Lint & Test) | `client/` | Checkout kode, setup Node.js 20 (cache npm), `npm ci`, `npm run lint --if-present` |
-| `backend` (Backend Lint & Test) | `server/` | Checkout kode, setup Node.js 20 (cache npm), `npm ci`, `npm run lint --if-present` |
+| `frontend` (Frontend Lint & Test) | `client/` | Checkout kode, setup Node.js 20 (cache npm), `npm ci`, `npm run lint`, `npm test` |
+| `backend` (Backend Lint & Test) | `server/` | Checkout kode, setup Node.js 20 (cache npm), `npm ci`, `npm run lint`, `npm test` |
 
-Jika salah satu job gagal, status check pada Pull Request menjadi merah.
+Jika salah satu langkah gagal, job menjadi merah dan status check pada Pull Request ikut gagal.
 
-## Langkah test dinonaktifkan sementara
+## Alat pengujian
 
-Langkah `npm test --if-present` di kedua job dijadikan komentar di `ci.yml`.
+| Bagian | Alat | Perintah |
+|---|---|---|
+| Backend | Jest | `npm test` |
+| Frontend | Vitest | `npm test` (menjalankan `vitest run`) |
 
-Alasannya: `npm init` membuat script `test` bawaan di `package.json` yang berisi `echo "Error: no test specified" && exit 1`. Karena script itu ada, flag `--if-present` tidak melewati langkahnya, sehingga job backend gagal walaupun kodenya benar. Unit test baru ditambahkan pada Pertemuan 8, jadi langkah ini akan diaktifkan kembali setelah Jest dipasang dan test pertama ditulis.
+Daftar skenario uji ada di `docs/test_matrix.md`.
+
+## Aturan proteksi branch `main`
+
+| Aturan | Status |
+|---|---|
+| Perubahan wajib lewat Pull Request | Aktif |
+| Minimal 1 approval dari anggota lain | Aktif |
+| Status check `Frontend Lint & Test` dan `Backend Lint & Test` wajib lulus sebelum merge | [Aktif / Belum diaktifkan] |
+
+Baris terakhir diisi sesuai kondisi sebenarnya di **Settings > Branches** setelah pengaturan dilakukan.
 
 ## Syarat agar CI berjalan
 
-- `client/` dan `server/` masing-masing harus punya `package-lock.json` (dipakai oleh `npm ci` dan cache npm). Jika tidak ada, langkah setup Node gagal dengan pesan "unable to cache dependencies".
-- Script `lint` didefinisikan di `package.json` tiap folder. Contoh: `"lint": "eslint ."`.
-- Flag `--if-present` membuat langkah lint dilewati jika script belum ada. Akibatnya CI bisa berstatus hijau tanpa benar-benar memeriksa kode, jadi script lint harus segera dilengkapi.
+- `client/` dan `server/` masing-masing memiliki `package-lock.json` yang sinkron dengan `package.json` (dipakai oleh `npm ci` dan cache npm).
+- Script `lint` dan `test` terdefinisi di `package.json` kedua folder.
+- Unit test tidak bergantung pada database atau secret asli.
+- Perubahan pada `package.json` dan `package-lock.json` selalu di-commit bersamaan.
 
-## Aturan status check
+## Riwayat perubahan
 
-- Pada Pertemuan 7, fokus pada linting otomatis di setiap Pull Request.
-- Pada Pertemuan 8, unit test ditambahkan, langkah test diaktifkan kembali, dan branch protection diaktifkan: Pull Request hanya bisa di-merge jika seluruh check berstatus hijau.
+| Pertemuan | Perubahan |
+|---|---|
+| 7 | Langkah test dinonaktifkan sementara karena script `test` bawaan `npm init` berisi `exit 1` |
+| 8 | Script `test` diganti (`jest` dan `vitest run`), unit test autentikasi ditambahkan, dan langkah test diaktifkan kembali di CI |
 
 ## Cara membaca hasil
 
-Buka Pull Request dan lihat bagian **Checks** di bagian bawah, atau buka tab **Actions** di repositori. Centang hijau berarti lolos, tanda silang merah berarti gagal. Klik nama job untuk melihat log error.
+Buka Pull Request dan lihat bagian **Checks**, atau buka tab **Actions** di repositori. Centang hijau berarti lolos, tanda silang merah berarti gagal. Klik nama job, lalu cari langkah yang bertanda silang untuk melihat log error.
+
+Tips: tombol **Re-run jobs** menjalankan ulang commit yang sama. Untuk memakai perubahan terbaru, perbarui branch dengan `main` lalu push commit baru.
