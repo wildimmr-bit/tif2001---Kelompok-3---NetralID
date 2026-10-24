@@ -24,9 +24,8 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint --if-present
-      # Dinonaktifkan sementara, diaktifkan kembali di Pertemuan 8 setelah Jest dipasang
-      #- name: Run tests
-      #  run: npm test --if-present
+      - name: Run tests
+        run: npm test --if-present
 
   backend:
     name: Backend Lint & Test
@@ -45,6 +44,5 @@ jobs:
         run: npm ci
       - name: Run lint
         run: npm run lint --if-present
-      # Dinonaktifkan sementara, diaktifkan kembali di Pertemuan 8 setelah Jest dipasang
-      #- name: Run tests
-      #  run: npm test --if-present
+      - name: Run tests
+        run: npm test --if-present
