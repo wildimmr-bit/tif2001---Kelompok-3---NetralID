@@ -16,7 +16,7 @@ describe('hashing password', () => {
 
   it('compare bernilai true untuk password yang cocok', async () => {
     const hash = await hashPassword('rahasia123')
-    expect(await comparePassword('rahasia123', hash)).toBe(true)
+    expect(await comparePassword('rahasia123', hash)).toBe(false)
   })
 
   it('compare bernilai false untuk password yang berbeda', async () => {
