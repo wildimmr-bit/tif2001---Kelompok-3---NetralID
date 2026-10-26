@@ -1,5 +1,5 @@
 # tif2001 Kelompok 3 NetralID
-Proyek Pengembangan Aplikasi  Costly - TIF2001 Software Development
+Proyek Pengembangan Aplikasi  Hitungin - TIF2001 Software Development
 nama kelompok dan tugas
 1. Moh. Faktur Rohman (Frontend & UI/UX Specialist)
 2. Wildanul Ikhsan (Backend & Database Engineer)
