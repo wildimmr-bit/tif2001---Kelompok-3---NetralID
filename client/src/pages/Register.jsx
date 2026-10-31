@@ -7,16 +7,20 @@ import {
   validatePassword,
   validateConfirmPassword,
 } from '../utils/validation'
+import { registerUser } from '../services/authService'
+
+const emptyForm = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+}
 
 function Register() {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
+  const [form, setForm] = useState(emptyForm)
   const [errors, setErrors] = useState({})
-  const [message, setMessage] = useState('')
+  const [feedback, setFeedback] = useState({ type: '', text: '' })
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -24,7 +28,7 @@ function Register() {
     setErrors({ ...errors, [name]: '' })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const newErrors = {
       name: validateName(form.name),
@@ -39,12 +43,28 @@ function Register() {
 
     const hasError = Object.values(newErrors).some((err) => err)
     if (hasError) {
-      setMessage('')
+      setFeedback({ type: '', text: '' })
       return
     }
 
-    // TODO: hubungkan ke endpoint register backend (feat/server-auth-jwt)
-    setMessage('Validasi berhasil. Koneksi ke server akan ditambahkan.')
+    setLoading(true)
+    setFeedback({ type: '', text: '' })
+    try {
+      const data = await registerUser({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+      })
+      setFeedback({
+        type: 'success',
+        text: data.message || 'Registrasi berhasil',
+      })
+      setForm(emptyForm)
+    } catch (error) {
+      setFeedback({ type: 'error', text: error.message })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -52,7 +72,7 @@ function Register() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">Daftar</h1>
         <p className="text-sm text-gray-500 mb-6">
-          Buat akun NetralID baru
+          Buat akun Hitungin baru
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
@@ -94,14 +114,21 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
           >
-            Daftar
+            {loading ? 'Memproses...' : 'Daftar'}
           </button>
         </form>
 
-        {message && (
-          <p className="mt-4 text-sm text-green-600">{message}</p>
+        {feedback.text && (
+          <p
+            className={`mt-4 text-sm ${
+              feedback.type === 'success' ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            {feedback.text}
+          </p>
         )}
 
         <p className="mt-6 text-center text-sm text-gray-500">
