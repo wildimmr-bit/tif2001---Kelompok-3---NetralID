@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FormInput from '../components/FormInput'
 import { validateEmail, validatePassword } from '../utils/validation'
+import { loginUser } from '../services/authService'
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
-  const [message, setMessage] = useState('')
+  const [feedback, setFeedback] = useState({ type: '', text: '' })
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -14,7 +16,7 @@ function Login() {
     setErrors({ ...errors, [name]: '' })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const newErrors = {
       email: validateEmail(form.email),
@@ -23,12 +25,23 @@ function Login() {
     setErrors(newErrors)
 
     if (newErrors.email || newErrors.password) {
-      setMessage('')
+      setFeedback({ type: '', text: '' })
       return
     }
 
-    // TODO: hubungkan ke endpoint login backend (feat/server-auth-jwt)
-    setMessage('Validasi berhasil. Koneksi ke server akan ditambahkan.')
+    setLoading(true)
+    setFeedback({ type: '', text: '' })
+    try {
+      const data = await loginUser({
+        email: form.email.trim(),
+        password: form.password,
+      })
+      setFeedback({ type: 'success', text: data.message || 'Login berhasil' })
+    } catch (error) {
+      setFeedback({ type: 'error', text: error.message })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -36,7 +49,7 @@ function Login() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">Masuk</h1>
         <p className="text-sm text-gray-500 mb-6">
-          Masuk ke akun NetralID Anda
+          Masuk ke akun Hitungin Anda
         </p>
 
         <form onSubmit={handleSubmit} noValidate>
@@ -61,14 +74,21 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            disabled={loading}
+            className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
           >
-            Masuk
+            {loading ? 'Memproses...' : 'Masuk'}
           </button>
         </form>
 
-        {message && (
-          <p className="mt-4 text-sm text-green-600">{message}</p>
+        {feedback.text && (
+          <p
+            className={`mt-4 text-sm ${
+              feedback.type === 'success' ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
+            {feedback.text}
+          </p>
         )}
 
         <p className="mt-6 text-center text-sm text-gray-500">
