@@ -154,3 +154,37 @@ curl -i -X POST http://localhost:5000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"uji3@example.com","password":"rahasia123"}'
 ```
+## 4. Bahan
+
+Semua endpoint bahan wajib menyertakan header `Authorization: Bearer <token>`. Pengguna hanya dapat mengakses bahan miliknya sendiri.
+
+| Method | Endpoint | Fungsi | Status sukses |
+|---|---|---|---|
+| GET | `/ingredients` | Daftar bahan milik pengguna, urut nama | 200 |
+| POST | `/ingredients` | Tambah bahan | 201 |
+| PUT | `/ingredients/:id` | Ubah bahan | 200 |
+| DELETE | `/ingredients/:id` | Hapus bahan | 200 |
+| GET | `/ingredients/:id/history` | Riwayat harga bahan | 200 |
+
+Request body (POST dan PUT):
+
+| Field | Tipe | Aturan |
+|---|---|---|
+| `name` | string | Wajib, maksimal 100 karakter, unik per pengguna (huruf besar dan kecil dianggap sama) |
+| `purchase_unit` | string | Salah satu dari `kg`, `gram`, `ons`, `liter`, `ml`, `butir` |
+| `purchase_qty` | number | Lebih dari 0 |
+| `purchase_price` | number | Tidak boleh negatif |
+
+Respons sukses berisi `message` dan `data`. Kolom `price_per_base` adalah harga per satuan dasar (gram, ml, atau butir), dihitung server. Contoh: 1 kg seharga Rp12.000 menghasilkan `price_per_base` bernilai 12.
+
+Kode galat:
+
+| Status | Kondisi |
+|---|---|
+| 400 | Data tidak valid. Balasan memuat objek `errors` per field |
+| 401 | Token tidak ada atau tidak valid |
+| 404 | Bahan tidak ditemukan, id bukan UUID, atau bahan milik pengguna lain |
+| 409 | Nama bahan sudah ada, atau bahan masih dipakai dalam resep |
+| 500 | Kesalahan server |
+
+Riwayat harga hanya bertambah saat satuan, jumlah, atau harga beli berubah. Mengubah nama saja tidak menambah riwayat.
