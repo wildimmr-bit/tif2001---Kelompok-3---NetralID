@@ -1,8 +1,4 @@
-import axios from 'axios'
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
-})
+import api from './api'
 
 const getErrorMessage = (error, fallback) => {
   if (error.response && error.response.data && error.response.data.message) {
