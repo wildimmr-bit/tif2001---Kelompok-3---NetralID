@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import FormInput from '../components/FormInput'
 import { validateEmail, validatePassword } from '../utils/validation'
 import { loginUser } from '../services/authService'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [feedback, setFeedback] = useState({ type: '', text: '' })
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -37,6 +39,7 @@ function Login() {
         password: form.password,
       })
       setFeedback({ type: 'success', text: data.message || 'Login berhasil' })
+      navigate('/bahan', { replace: true })
     } catch (error) {
       setFeedback({ type: 'error', text: error.message })
     } finally {
