@@ -6,3 +6,7 @@ Nama bahan	Wajib, maksimal 100 karakter	Nama bahan wajib diisi, Nama bahan maksi
 Satuan	Wajib dipilih	Satuan wajib dipilih
 Jumlah	Wajib, angka lebih dari 0, boleh desimal dengan koma atau titik	Jumlah beli wajib diisi, Jumlah beli harus berupa angka, Jumlah beli harus lebih dari 0
 Harga	Wajib, angka bulat tanpa titik dan koma	Harga beli wajib diisi, Harga diisi angka saja, tanpa titik atau komaexit
+
+Halaman Bahan dan alurnya: login berhasil lalu halaman Bahan, dan halaman itu hanya bisa dibuka setelah login.
+Komponen yang benar-benar dipakai (ProtectedRoute, FormInput untuk Login dan Register).
+Aturan validasi form bahan (nama wajib dan maksimal 100 karakter, satuan wajib dipilih, jumlah lebih dari 0 dan boleh desimal, harga angka bulat tanpa titik dan koma).
