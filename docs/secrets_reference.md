@@ -35,3 +35,9 @@ Unit test tidak menyentuh database asli. Test backend mengisi `JWT_SECRET` denga
 2. Perbarui nilai baru di `.env` lokal setiap anggota dan di tempat deploy.
 3. Beri tahu seluruh tim.
 4. Jika file rahasia sudah masuk ke riwayat Git, hapus dari riwayat sesuai prosedur yang disepakati tim.
+
+Nama	Lokasi	Fungsi	Rahasia?
+SENTRY_DSN	server/.env, GitHub Secrets	Alamat pelaporan galat backend ke Sentry	Perlakukan sebagai rahasia
+VITE_SENTRY_DSN	client/.env	Alamat pelaporan galat frontend ke Sentry, terlihat di browser	Tidak rahasia, tapi tidak dipublikasikan
+
+Di bagian GitHub Secrets pada dokumen yang sama, tulis SENTRY_DSN sebagai nama secret yang ada
