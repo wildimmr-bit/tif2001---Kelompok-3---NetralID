@@ -1,0 +1,144 @@
+.ingredients-page {
+  --warna-utama: #f97316;
+  --warna-utama-gelap: #ea580c;
+  --warna-latar: #fff7ed;
+  --warna-teks: #292524;
+  --warna-galat: #dc2626;
+  --warna-garis: #e7e5e4;
+  text-align: left;
+  width: 100%;
+
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+  color: var(--warna-teks);
+  background: var(--warna-latar);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.ingredients-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ingredient-form,
+.ingredient-card {
+  background: #fff;
+  border: 1px solid var(--warna-garis);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.field input,
+.field select {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--warna-garis);
+  border-radius: 8px;
+}
+
+.error-text {
+  color: var(--warna-galat);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.notice {
+  color: #166534;
+  margin: 8px 0;
+}
+
+.preview {
+  background: var(--warna-latar);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0 0 12px;
+}
+
+.form-actions,
+.ingredient-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ingredient-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ingredient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.muted {
+  color: #78716c;
+  font-size: 0.9rem;
+}
+
+.history {
+  margin-top: 12px;
+  border-top: 1px solid var(--warna-garis);
+  padding-top: 8px;
+}
+
+.history ul {
+  padding-left: 18px;
+  margin: 4px 0 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  font: inherit;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: var(--warna-utama);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--warna-utama-gelap);
+}
+
+.btn-secondary {
+  background: #fff;
+  border-color: var(--warna-garis);
+  color: var(--warna-teks);
+}
+
+.btn-danger {
+  background: #fff;
+  border-color: var(--warna-galat);
+  color: var(--warna-galat);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
