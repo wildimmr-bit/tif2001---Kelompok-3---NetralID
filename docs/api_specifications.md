@@ -188,3 +188,44 @@ Kode galat:
 | 500 | Kesalahan server |
 
 Riwayat harga hanya bertambah saat satuan, jumlah, atau harga beli berubah. Mengubah nama saja tidak menambah riwayat.
+
+### Daftar bahan
+
+GET /ingredients?search=&category=&page=&limit=
+
+| Parameter | Aturan | Bawaan |
+|---|---|---|
+| search | Teks, maksimal 100 karakter. Pencarian tidak membedakan huruf besar dan kecil (ILIKE) | kosong |
+| category | Satu atau beberapa id kategori dipisah koma, maksimal 10 (contoh: 1,3) | semua |
+| page | Bilangan bulat mulai 1 | 1 |
+| limit | Bilangan bulat 1 sampai 50 | 10 |
+
+Respons 200:
+{ "message": "Daftar bahan", "data": [ ... ], "meta": { "totalRows": 23, "totalPages": 3, "currentPage": 1, "limit": 10 } }
+
+Offset dihitung (page - 1) x limit. Halaman di luar jangkauan mengembalikan data kosong dengan meta yang benar.
+Parameter tidak valid: 400 dengan objek errors.
+
+### Kategori
+
+GET /categories → 200, { data: [{ id, name }] }
+
+### Tambah dan ubah bahan
+
+Body menerima category_id (angka, boleh kosong). Kategori yang tidak ada: 400.
+Respons memuat category_id, category_name, dan image_url.
+
+### Unggah gambar
+
+POST /ingredients/:id/image (multipart/form-data, kolom "image")
+
+| Status | Kondisi |
+|---|---|
+| 200 | Berhasil, data memuat image_url |
+| 400 | Tipe bukan JPEG/PNG/WebP, isi berkas bukan gambar, atau tidak ada berkas |
+| 401 | Tidak ada token |
+| 404 | Bahan tidak ada atau milik pengguna lain |
+| 413 | Ukuran lebih dari 2 MB |
+
+Berkas ditampung di memori, diunggah ke cloud storage, dan hanya alamat publiknya yang disimpan di database.
+Gambar lama dihapus saat diganti atau saat bahan dihapus.
