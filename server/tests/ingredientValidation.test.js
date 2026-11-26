@@ -6,7 +6,7 @@ describe('validateIngredientInput', () => {
   it('menerima data yang benar dan merapikannya', () => {
     const { errors, data } = validateIngredientInput({ ...valid, name: '  Tepung terigu  ' })
     expect(errors).toEqual({})
-    expect(data).toEqual(valid)
+    expect(data).toEqual({ ...valid, category_id: null })
   })
 
   it('menerima angka dalam bentuk teks', () => {
@@ -59,7 +59,26 @@ describe('validateIngredientInput', () => {
     expect(validateIngredientInput({ ...valid, purchase_price: 1e12 }).errors.purchase_price).toBeDefined()
   })
 
-  it('tidak error saat body kosong, dan melaporkan semua isian', () => {
+  it('kategori boleh kosong, dan terbaca sebagai null', () => {
+    ;[undefined, null, ''].forEach((category_id) => {
+      const { errors, data } = validateIngredientInput({ ...valid, category_id })
+      expect(errors).toEqual({})
+      expect(data.category_id).toBeNull()
+    })
+  })
+
+  it('menerima id kategori berupa angka atau teks angka', () => {
+    expect(validateIngredientInput({ ...valid, category_id: 3 }).data.category_id).toBe(3)
+    expect(validateIngredientInput({ ...valid, category_id: '3' }).data.category_id).toBe(3)
+  })
+
+  it('menolak id kategori nol, negatif, desimal, bukan angka, dan terlalu besar', () => {
+    ;[0, -1, 1.5, 'abc', 99999999999].forEach((category_id) => {
+      expect(validateIngredientInput({ ...valid, category_id }).errors.category_id).toBeDefined()
+    })
+  })
+
+  it('tidak error saat body kosong, dan melaporkan semua isian wajib', () => {
     const { errors } = validateIngredientInput(undefined)
     expect(Object.keys(errors).sort()).toEqual(['name', 'purchase_price', 'purchase_qty', 'purchase_unit'])
   })

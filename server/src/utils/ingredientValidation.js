@@ -43,9 +43,27 @@ const validateIngredientInput = (body) => {
     errors.purchase_price = 'Harga beli terlalu besar';
   }
 
+  // Kategori boleh kosong. Bila diisi harus berupa id bilangan bulat positif.
+  let categoryId = null;
+  const rawCategory = source.category_id;
+  if (rawCategory !== undefined && rawCategory !== null && rawCategory !== '') {
+    const parsed = toNumber(rawCategory);
+    if (!Number.isInteger(parsed) || parsed < 1 || parsed > 2147483647) {
+      errors.category_id = 'Kategori tidak valid';
+    } else {
+      categoryId = parsed;
+    }
+  }
+
   return {
     errors,
-    data: { name, purchase_unit: unit, purchase_qty: qty, purchase_price: price },
+    data: {
+      name,
+      purchase_unit: unit,
+      purchase_qty: qty,
+      purchase_price: price,
+      category_id: categoryId,
+    },
   };
 };
 
