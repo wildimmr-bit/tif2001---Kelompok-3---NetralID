@@ -5,8 +5,6 @@
   --warna-teks: #292524;
   --warna-galat: #dc2626;
   --warna-garis: #e7e5e4;
-  text-align: left;
-  width: 100%;
 
   max-width: 640px;
   margin: 0 auto;
@@ -66,6 +64,7 @@
   margin: 0 0 12px;
 }
 
+.header-actions,
 .form-actions,
 .ingredient-actions {
   display: flex;
@@ -141,4 +140,97 @@
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.filters {
+  margin: 12px 0;
+}
+
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--warna-garis);
+  border-radius: 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--warna-garis);
+  background: #fff;
+  color: var(--warna-teks);
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--warna-utama);
+  border-color: var(--warna-utama);
+  color: #fff;
+}
+
+.category-badge {
+  align-self: flex-start;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--warna-latar);
+  border: 1px solid var(--warna-garis);
+}
+
+.ingredient-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.ingredient-main .ingredient-info {
+  margin-bottom: 0;
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--warna-garis);
+  flex-shrink: 0;
+}
+
+.image-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--warna-garis);
+}
+
+.pagination-area {
+  margin: 16px 0;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-number[aria-current='page'] {
+  background: var(--warna-utama);
+  border-color: var(--warna-utama);
+  color: #fff;
 }

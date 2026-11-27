@@ -36,13 +36,36 @@ const request = async (config) => {
   }
 }
 
-export const listIngredients = async () => (await request({ method: 'get', url: '/ingredients' })).data
+// params: { search, category, page, limit }. Nilai kosong tidak dikirim.
+export const listIngredients = async (params = {}) => {
+  const clean = Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== '' && value !== undefined && value !== null)
+  )
+  const body = await request({ method: 'get', url: '/ingredients', params: clean })
+  // Server lama (sebelum paginasi) tidak mengirim meta. Dibuat satu halaman agar halaman tidak error.
+  const meta = body.meta || {
+    totalRows: body.data.length,
+    totalPages: 1,
+    currentPage: 1,
+    limit: body.data.length,
+  }
+  return { items: body.data, meta }
+}
+
+export const listCategories = async () => (await request({ method: 'get', url: '/categories' })).data
 
 export const createIngredient = async (payload) =>
   (await request({ method: 'post', url: '/ingredients', data: payload })).data
 
 export const updateIngredient = async (id, payload) =>
   (await request({ method: 'put', url: `/ingredients/${id}`, data: payload })).data
+
+// Mengirim berkas sebagai multipart/form-data pada kolom "image".
+export const uploadIngredientImage = async (id, file) => {
+  const form = new FormData()
+  form.append('image', file)
+  return (await request({ method: 'post', url: `/ingredients/${id}/image`, data: form })).data
+}
 
 export const deleteIngredient = async (id) => {
   await request({ method: 'delete', url: `/ingredients/${id}` })
